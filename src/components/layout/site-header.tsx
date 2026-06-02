@@ -51,22 +51,7 @@ export function SiteHeader({ fixed = false }: SiteHeaderProps = {}) {
       }
     >
       <Link href="/" aria-label="Jeevan PG" className="flex items-center gap-2">
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="text-foreground"
-        >
-          <path
-            d="M3 9.5L12 3L21 9.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V9.5Z"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <span className="text-[15px] font-semibold tracking-tight text-foreground">
+        <span className="text-lg font-semibold tracking-tight text-foreground">
           Jeevan PG
         </span>
       </Link>
