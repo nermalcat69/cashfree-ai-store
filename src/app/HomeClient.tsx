@@ -45,6 +45,7 @@ export default function HomeClient({ hostels }: { hostels: Hostel[] }) {
   const [ctaHovered, setCtaHovered] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const id = requestAnimationFrame(() => setEntered(true));
     return () => cancelAnimationFrame(id);
   }, []);
@@ -111,9 +112,9 @@ export default function HomeClient({ hostels }: { hostels: Hostel[] }) {
                 (entered || ctaHovered) && "giti-shimmer-text",
               )}
             >
-              Your home
+              Cashfree Payments
               <br />
-              away from home
+              AI Store
             </motion.h1>
 
             <motion.span
