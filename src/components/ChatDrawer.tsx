@@ -37,12 +37,17 @@ type Message = {
   payment?: PaymentResult;
 };
 
-function ChatIcon({ size = 22 }: { size?: number }) {
+function ChatIcon({ className }: { className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 110 110"
+      fill="none"
+      className={className}
+    >
       <path
-        d="M12 3C6.48 3 2 6.92 2 11.75c0 2.47 1.2 4.7 3.13 6.25L4 21l3.38-1.69A11.25 11.25 0 0012 20.5c5.52 0 10-3.92 10-8.75S17.52 3 12 3z"
         fill="currentColor"
+        d="M55 110c30.376 0 55-24.624 55-55S85.376 0 55 0 0 24.624 0 55c0 8.798 2.066 17.114 5.739 24.489.976 1.96 1.301 4.2.735 6.314L3.198 98.046c-1.422 5.316 3.44 10.178 8.755 8.755l12.244-3.275c2.115-.566 4.355-.241 6.314.735C37.886 107.934 46.202 110 55 110Z"
       />
     </svg>
   );
@@ -61,13 +66,6 @@ function XIcon() {
   );
 }
 
-function SendIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-      <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function PaymentCard({ payment }: { payment: PaymentResult }) {
   const [copied, setCopied] = useState(false);
@@ -120,10 +118,12 @@ export default function ChatDrawer() {
   const [loading, setLoading] = useState(false);
   const [pollingOrderId, setPollingOrderId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (open) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      inputRef.current?.focus();
     }
   }, [messages, open]);
 
@@ -241,12 +241,8 @@ export default function ChatDrawer() {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-black/6 bg-white px-4 py-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-white">
-              <ChatIcon size={14} />
-            </div>
             <div>
-              <p className="text-[13px] font-semibold text-foreground">Jeevan PG Assistant</p>
-              <p className="text-[11px] text-muted-foreground">Powered by AI · Test mode</p>
+              <p className="text-lg font-semibold text-foreground">Jeevan PG Assistant</p>
             </div>
           </div>
           <button
@@ -297,6 +293,7 @@ export default function ChatDrawer() {
         <div className="border-t border-black/6 bg-white px-4 py-3">
           <div className="flex items-end gap-2">
             <textarea
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -314,9 +311,11 @@ export default function ChatDrawer() {
             <button
               onClick={sendMessage}
               disabled={loading || !input.trim()}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-white transition hover:opacity-90 disabled:opacity-40"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500 cursor-pointer text-white transition hover:bg-blue-600 disabled:opacity-40"
             >
-              <SendIcon />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </button>
           </div>
           <p className="mt-1.5 text-[10px] text-neutral-400">
@@ -328,12 +327,12 @@ export default function ChatDrawer() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-white shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-all duration-200 hover:scale-105 hover:shadow-[0_6px_28px_rgba(0,0,0,0.30)] ${
+        className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 cursor-pointer hover:bg-blue-600 text-white ${
           open ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
         aria-label="Open chat"
       >
-        <ChatIcon size={22} />
+        <ChatIcon className="size-6" />
       </button>
 
       <style>{`

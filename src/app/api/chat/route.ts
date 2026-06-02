@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI, Type, type Tool, type Content, type Part } from "@google/genai";
 import { createCashfreeOrder, getCashfreeOrderStatus } from "@/lib/cashfree";
-import { getHostels } from "@/lib/hostels-db";
+import { buildSiteContext } from "@/lib/site-context";
 import { db } from "@/lib/db";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
@@ -42,11 +42,11 @@ const TOOLS: Tool[] = [
   },
 ];
 
-function buildSystemInstruction(hostelsCatalog: string, activeOrderId: string | null) {
+function buildSystemInstruction(siteContext: string, activeOrderId: string | null) {
   return `You are a helpful booking assistant for Jeevan PG, a premium paying-guest accommodation in Bengaluru.
 
-Here are the available properties with their pricing:
-${hostelsCatalog}
+Here is the complete site data as JSON — use it to answer any question about properties, pricing, contact details, amenities, and more:
+${siteContext}
 
 When a user wants to book, look up the correct price from the catalog above — never ask the user for the price or amount. Only collect their name, phone number, and email, then call create_payment with the correct amount from the room type they choose.
 If they don't specify a room type, use the starting (cheapest) price for that property.
@@ -120,17 +120,8 @@ async function handleToolCall(
 export async function POST(req: NextRequest) {
   const { messages, activeOrderId }: ChatRequest = await req.json();
 
-  const hostels = await getHostels();
-  const hostelsCatalog = hostels
-    .map((h) => {
-      const rooms = h.roomTypes
-        .map((r) => `    - ${r.type} (${r.occupancy}): ${r.price}`)
-        .join("\n");
-      return `**${h.name}** (${h.gender} only)\n  Address: ${h.address}\n  Amenities: ${h.amenities.join(", ")}\n  Room types:\n${rooms}`;
-    })
-    .join("\n\n");
-
-  const systemInstruction = buildSystemInstruction(hostelsCatalog, activeOrderId ?? null);
+  const siteContext = await buildSiteContext();
+  const systemInstruction = buildSystemInstruction(siteContext, activeOrderId ?? null);
   const contents: Content[] = messages.map((m) => ({
     role: m.role === "assistant" ? "model" : "user",
     parts: [{ text: m.content }],
