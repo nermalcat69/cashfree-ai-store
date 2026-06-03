@@ -1,5 +1,8 @@
 # Cashfree AI Store
 
+<img width="1191" height="837" alt="Screenshot 2026-06-03 at 11 04 28 AM" src="https://github.com/user-attachments/assets/24ac9968-5a4b-41df-8459-23ef2bd6f487" />
+
+
 An AI-powered hostel booking demo with a chat agent that can answer questions, showcase listings, and trigger UPI payments via Cashfree — all from a single chat drawer.
 
 > **Not production-ready.** This is a demonstration. For a production-grade implementation, reach out at [arjun@graycup.in](mailto:arjun@graycup.in) or [@arjunaditya\_](https://x.com/arjunaditya_) on X.
